@@ -184,6 +184,7 @@ public final class Client {
     System.out.println("          values in the propertyfile");
     System.out.println("  -s:  show status during run (default: no status)");
     System.out.println("  -l label:  use label for status (e.g. to label one experiment out of a whole batch)");
+    System.out.println("  -seed seed:  specify the seed used to initialize the random number generator with");
     System.out.println("");
     System.out.println("Required properties:");
     System.out.println("  " + WORKLOAD_PROPERTY + ": the name of the workload class to use (e.g. " +
@@ -635,6 +636,19 @@ public final class Client {
         String value = args[argindex].substring(eq + 1);
         props.put(name, value);
         argindex++;
+      } else if (args[argindex].compareTo("-seed") == 0) {
+        argindex++;
+
+        if (argindex >= args.length) {
+          usageMessage();
+          System.out.println("Missing argument value for -seed.");
+          System.exit(0);
+        }
+
+        String seed = args[argindex];
+        argindex++;
+
+        Utils.setSeed(Long.parseLong(seed));
       } else {
         usageMessage();
         System.out.println("Unknown option " + args[argindex]);
